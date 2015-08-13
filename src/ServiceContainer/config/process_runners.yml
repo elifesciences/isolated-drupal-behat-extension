@@ -1,0 +1,10 @@
+services:
+
+  elife.isolated_drupal_behat.process_runner:
+    class: eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner
+    abstract: true
+
+  elife.isolated_drupal_behat.process_runner.must_run:
+    class: eLife\IsolatedDrupalBehatExtension\Process\MustRunProcessRunner
+    decorates: elife.isolated_drupal_behat.process_runner
+    public: false

@@ -1,0 +1,23 @@
+services:
+
+  elife.isolated_drupal_behat.random_string_generator:
+    class: eLife\IsolatedDrupalBehatExtension\RandomString\RandomStringGenerator
+    abstract: true
+
+  elife.isolated_drupal_behat.random_string_generator.duplicate_checking:
+    class: eLife\IsolatedDrupalBehatExtension\RandomString\DuplicateCheckingRandomStringGenerator
+    decorates: elife.isolated_drupal_behat.random_string_generator
+    public: false
+    arguments:
+      - @elife.isolated_drupal_behat.random_string_generator.limiting
+
+  elife.isolated_drupal_behat.random_string_generator.limiting:
+    class: eLife\IsolatedDrupalBehatExtension\RandomString\LimitingRandomStringGenerator
+    public: false
+    arguments:
+      - @elife.isolated_drupal_behat.random_string_generator.hash
+      - 10
+
+  elife.isolated_drupal_behat.random_string_generator.hash:
+    class: eLife\IsolatedDrupalBehatExtension\RandomString\HashRandomStringGenerator
+    public: false

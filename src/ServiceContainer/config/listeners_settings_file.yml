@@ -1,0 +1,29 @@
+services:
+
+  elife.isolated_drupal_behat.listener.settings.database:
+    class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\DatabaseSettingsFileListener
+    arguments:
+      - %elife_drupal_behat.db_url%
+    tags:
+      - { name: event_dispatcher.subscriber }
+
+  elife.isolated_drupal_behat.listener.settings.inclusion:
+    class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\InclusionSettingsFileListener
+    arguments:
+      - %elife_drupal_behat.settings_file%
+    tags:
+      - { name: event_dispatcher.subscriber }
+
+  elife.isolated_drupal_behat.listener.settings.hash_salt:
+    class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\HashSaltSettingsFileListener
+    arguments:
+      - @elife.isolated_drupal_behat.random_string_generator
+    tags:
+      - { name: event_dispatcher.subscriber }
+
+  elife.isolated_drupal_behat.listener.settings.file_path:
+    class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\FilePathSettingsFileListener
+    arguments:
+      - @elife.isolated_drupal_behat.random_string_generator
+    tags:
+      - { name: event_dispatcher.subscriber }

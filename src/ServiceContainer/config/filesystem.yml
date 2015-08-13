@@ -1,0 +1,12 @@
+services:
+
+  elife.isolated_drupal_behat.filesystem_cleaner:
+    class: eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner
+    abstract: true
+
+  elife.isolated_drupal_behat.filesystem_cleaner.symfony:
+    class: eLife\IsolatedDrupalBehatExtension\Filesystem\SymfonyFilesystemCleaner
+    decorates: elife.isolated_drupal_behat.filesystem_cleaner
+    public: false
+    arguments:
+      - @elife.isolated_drupal_behat.symfony_filesystem
