@@ -108,6 +108,8 @@ final class BypassInstallSiteListenerTest extends ListenerTest
         $dispatcher = $this->prophesize('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $root = vfsStream::setup('foo');
         $root->addChild($sites = vfsStream::newDirectory('sites'));
+        $sites->addChild($site = vfsStream::newDirectory('localhost'));
+        $site->addChild($file = vfsStream::newFile('bar.tmp'));
         $sites->addChild($site = vfsStream::newDirectory('localhost.master'));
         $site->addChild($file = vfsStream::newFile('foo.tmp'));
         $site->addChild($file = vfsStream::newFile('db.sql'));
@@ -133,6 +135,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
 
         $this->assertFileExists($drupal->getSitePath() . '/foo.tmp');
         $this->assertFileNotExists($drupal->getSitePath() . '/db.sql');
+        $this->assertFileNotExists($drupal->getSitePath() . '/bar.tmp');
 
         $processRunner
             ->run(Argument::type('Symfony\Component\Process\Process'))
