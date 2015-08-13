@@ -12,7 +12,13 @@ matrix:
       - php: nightly
       - php: hhvm
 
+sudo: false
+
+cache:
+    directories:
+      - $HOME/.composer/cache
+
 install:
-  - composer install --dev --prefer-source --no-interaction
+  - composer install --dev --no-interaction
 
 script: ./vendor/bin/phpunit --coverage-text
