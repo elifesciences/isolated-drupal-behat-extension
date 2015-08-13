@@ -19,6 +19,6 @@ cache:
       - $HOME/.composer/cache
 
 install:
-  - composer install --dev --no-interaction
+  - composer install --no-interaction
 
 script: ./vendor/bin/phpunit --coverage-text
