@@ -109,6 +109,17 @@ final class BypassInstallSiteListener implements EventSubscriber
             ]
         );
 
+        // Clean the database. (Mainly for SQLite.)
+        $this->processRunner->run(
+            ProcessBuilder::create()
+                ->setPrefix($this->binary)
+                ->add('sql-drop')
+                ->add('--yes')
+                ->setWorkingDirectory($this->drupal->getSitePath())
+                ->setTimeout(600)
+                ->getProcess()
+        );
+
         // Import the database.
         $this->processRunner->run(
             ProcessBuilder::create()

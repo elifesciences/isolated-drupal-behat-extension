@@ -139,17 +139,30 @@ final class BypassInstallSiteListenerTest extends ListenerTest
 
         $processRunner
             ->run(Argument::type('Symfony\Component\Process\Process'))
-            ->shouldBeCalledTimes(1)
-            ->should(new CallbackPrediction(function (array $calls) {
-                /** @var Call $call */
-                $call = $calls[0];
+            ->shouldBeCalledTimes(2)
+            ->should(new CallbackPrediction(function (array $calls) use ($drupal) {
+                /** @var Call[] $calls */
 
-                /** @var Process $process */
-                $process = $call->getArguments()[0];
+                /** @var Process $process0 */
+                $process0 = $calls[0]->getArguments()[0];
+                /** @var Process $process1 */
+                $process1 = $calls[1]->getArguments()[0];
 
                 Assert::assertSame(
+                    "'/path/to/drush' 'sql-drop' '--yes'",
+                    $process0->getCommandLine()
+                );
+                Assert::assertSame(
+                    $drupal->getSitePath(),
+                    $process0->getWorkingDirectory()
+                );
+                Assert::assertSame(
                     "'/path/to/drush' 'sql-query' '--file=vfs://foo/sites/localhost/db.sql' '--yes'",
-                    $process->getCommandLine()
+                    $process1->getCommandLine()
+                );
+                Assert::assertSame(
+                    $drupal->getSitePath(),
+                    $process1->getWorkingDirectory()
                 );
             }));
 
