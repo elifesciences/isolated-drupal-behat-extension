@@ -11,6 +11,9 @@ matrix:
     allow_failures:
       - php: nightly
       - php: hhvm
+    include:
+      - php: 5.4
+        env: DEPENDENCIES='low'
 
 sudo: false
 
@@ -19,6 +22,7 @@ cache:
       - $HOME/.composer/cache
 
 install:
-  - composer install --no-interaction
+  - if [ "$DEPENDENCIES" != "low" ]; then composer install --no-interaction; fi;
+  - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest --prefer-stable --no-interaction; fi;
 
 script: ./vendor/bin/phpunit --coverage-text
