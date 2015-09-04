@@ -10,3 +10,7 @@ services:
     public: false
     arguments:
       - @elife.isolated_drupal_behat.symfony_filesystem
+
+  elife.isolated_drupal_behat.filesystem_cleaner.no_op:
+    class: eLife\IsolatedDrupalBehatExtension\Filesystem\NoOpFilesystemCleaner
+    public: false

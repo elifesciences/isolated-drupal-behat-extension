@@ -65,6 +65,7 @@ final class IsolatedDrupalBehatExtensionTest extends TestCase
                     'db_url' => 'mysql://localhost/db',
                     'profile' => 'standard',
                     'settings_file' => null,
+                    'clean_up' => true,
                 ],
             ],
             [
@@ -72,11 +73,13 @@ final class IsolatedDrupalBehatExtensionTest extends TestCase
                     'db_url' => 'mysql://localhost/db',
                     'profile' => 'foo',
                     'settings_file' => __FILE__,
+                    'clean_up' => false,
                 ],
                 [
                     'db_url' => 'mysql://localhost/db',
                     'profile' => 'foo',
                     'settings_file' => __FILE__,
+                    'clean_up' => false,
                 ],
             ],
         ];
@@ -97,6 +100,7 @@ final class IsolatedDrupalBehatExtensionTest extends TestCase
                 'db_url' => $dbUrl = 'mysql://localhost/db',
                 'profile' => $profile = 'standard',
                 'settings_file' => $settingsFile = null,
+                'clean_up' => $cleanUp = true,
             ]
         );
 
@@ -111,6 +115,10 @@ final class IsolatedDrupalBehatExtensionTest extends TestCase
         $this->assertSame(
             $settingsFile,
             $container->getParameter('elife_drupal_behat.settings_file')
+        );
+        $this->assertSame(
+            $cleanUp,
+            $container->getParameter('elife_drupal_behat.clean_up')
         );
     }
 }

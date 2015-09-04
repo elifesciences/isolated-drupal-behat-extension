@@ -83,6 +83,10 @@ Note that the following values will be overwritten to ensure isolation:
 * `$conf["file_private_path"]`
 * `$conf["file_temporary_path"]`
 
+### `clean_up`
+
+By default, the extension will remove the sites it created after the suite has finished. If you're running the suite a few times in quick succession, this means it will be installing a site each time, which can be quite slow. Setting this value to `false` (the default is `true`) which cause it *not* clean up the filesystem, so the second (and subsequent) runs will use the copy of the installed site from the first run. This will be quicker, but it's up to the developer to make sure that no changes have been made to the install process (if required, the master site will need to be manually removed).
+
 Running the extension's tests
 -----------------------------
 

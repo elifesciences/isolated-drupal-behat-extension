@@ -4,8 +4,10 @@ namespace eLife\IsolatedDrupalBehatExtension\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension as TestworkExtension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use eLife\IsolatedDrupalBehatExtension\ServiceContainer\Compiler\FilesystemCleanerCompilerPass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface as CompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -13,6 +15,9 @@ final class IsolatedDrupalBehatExtension implements TestworkExtension
 {
     public function process(ContainerBuilder $container)
     {
+        foreach ($this->getCompilerPasses() as $compilerPass) {
+            $compilerPass->process($container);
+        }
     }
 
     public function getConfigKey()
@@ -32,6 +37,7 @@ final class IsolatedDrupalBehatExtension implements TestworkExtension
                     ->scalarNode('db_url')->isRequired()->end()
                     ->scalarNode('profile')->defaultValue('standard')->end()
                     ->scalarNode('settings_file')->defaultNull()->end()
+                    ->booleanNode('clean_up')->defaultTrue()->end()
                 ->end()
             ->end();
     }
@@ -62,5 +68,17 @@ final class IsolatedDrupalBehatExtension implements TestworkExtension
             'elife_drupal_behat.settings_file',
             $config['settings_file']
         );
+        $container->setParameter(
+            'elife_drupal_behat.clean_up',
+            $config['clean_up']
+        );
+    }
+
+    /**
+     * @return CompilerPass[]
+     */
+    public function getCompilerPasses()
+    {
+        return [new FilesystemCleanerCompilerPass()];
     }
 }
