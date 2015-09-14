@@ -116,7 +116,7 @@ final class BypassInstallSiteListener implements EventSubscriber
                 ->add('sql-drop')
                 ->add('--yes')
                 ->setWorkingDirectory($this->drupal->getSitePath())
-                ->setTimeout(600)
+                ->setTimeout(null)
                 ->getProcess()
         );
 
@@ -128,7 +128,7 @@ final class BypassInstallSiteListener implements EventSubscriber
                 ->add('--file=' . $this->drupal->getSitePath() . '/db.sql')
                 ->add('--yes')
                 ->setWorkingDirectory($this->drupal->getSitePath())
-                ->setTimeout(600)
+                ->setTimeout(null)
                 ->getProcess()
         );
         $this->filesystem->remove($this->drupal->getSitePath() . '/db.sql');
@@ -164,7 +164,7 @@ final class BypassInstallSiteListener implements EventSubscriber
                 ->add('--result-file=' . $this->masterPath . '/db.sql')
                 ->add('--yes')
                 ->setWorkingDirectory($this->drupal->getSitePath())
-                ->setTimeout(600)
+                ->setTimeout(null)
                 ->getProcess()
         );
     }
