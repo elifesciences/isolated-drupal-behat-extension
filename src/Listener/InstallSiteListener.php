@@ -74,7 +74,7 @@ final class InstallSiteListener implements EventSubscriber
             ->add('--account-pass=password')
             ->add('--yes')
             ->setWorkingDirectory($this->drupal->getSitePath())
-            ->setTimeout(600)
+            ->setTimeout(null)
             ->setEnv('PHP_OPTIONS', '-d sendmail_path=' . `which true`);
 
         $this->eventDispatcher->dispatch(
