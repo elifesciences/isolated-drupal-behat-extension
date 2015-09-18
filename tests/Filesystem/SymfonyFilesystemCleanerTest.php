@@ -2,11 +2,9 @@
 
 namespace eLife\IsolatedDrupalBehatExtension\Filesystem;
 
-use eLife\IsolatedDrupalBehatExtension\TestCase;
-use org\bovigo\vfs\vfsStream;
 use Symfony\Component\Filesystem\Filesystem;
 
-final class SymfonyFilesystemCleanerTest extends TestCase
+final class SymfonyFilesystemCleanerTest extends FilesystemCleanerTest
 {
     /**
      * @test
@@ -15,7 +13,7 @@ final class SymfonyFilesystemCleanerTest extends TestCase
     {
         $cleaner = new SymfonyFilesystemCleaner(new Filesystem());
 
-        $root = vfsStream::setup('foo');
+        $root = $this->createFilesystem('foo');
 
         $root->addChild($dir = $this->createDirectory('bar'));
         $cleaner->register($dir->url());
@@ -31,18 +29,5 @@ final class SymfonyFilesystemCleanerTest extends TestCase
 
         $this->assertCount(1, $root->getChildren());
         $this->assertTrue($root->hasChild('other'));
-    }
-
-    private function createDirectory($path)
-    {
-        return vfsStream::newDirectory($path);
-    }
-
-    private function createFile($path)
-    {
-        $file = vfsStream::newFile($path);
-        $file->setContent($path);
-
-        return $file;
     }
 }
