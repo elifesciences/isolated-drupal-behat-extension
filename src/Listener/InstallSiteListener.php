@@ -2,9 +2,9 @@
 
 namespace eLife\IsolatedDrupalBehatExtension\Listener;
 
-use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
-use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
-use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
+use Behat\Behat\EventDispatcher\Event\ExampleTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use eLife\IsolatedDrupalBehatExtension\Drupal;
 use eLife\IsolatedDrupalBehatExtension\Event\InstallingSite;
 use eLife\IsolatedDrupalBehatExtension\Event\SiteInstalled;
@@ -39,9 +39,9 @@ final class InstallSiteListener implements EventSubscriber
     {
         return [
             // Drupal extension will try and bootstrap at the beginning of the suite.
-            BeforeSuiteTested::BEFORE => ['onBeforeScenarioTested', 255],
-            BeforeScenarioTested::BEFORE => ['onBeforeScenarioTested', 255],
-            BeforeOutlineTested::BEFORE => ['onBeforeScenarioTested', 255],
+            SuiteTested::BEFORE => ['onBeforeScenarioTested', 255],
+            ScenarioTested::BEFORE => ['onBeforeScenarioTested', 255],
+            ExampleTested::BEFORE => ['onBeforeScenarioTested', 255],
         ];
     }
 
