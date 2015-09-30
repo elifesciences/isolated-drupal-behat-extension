@@ -1,3 +1,8 @@
+0.2.1 / 2015-09-30
+==================
+
+  * Fixed isolation of scenario outline examples ([#4](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/4)).
+
 0.2.0 / 2015-09-18
 ==================
 
