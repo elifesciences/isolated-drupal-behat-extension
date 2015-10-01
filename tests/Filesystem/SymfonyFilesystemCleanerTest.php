@@ -15,19 +15,14 @@ final class SymfonyFilesystemCleanerTest extends FilesystemCleanerTest
 
         $root = $this->createFilesystem('foo');
 
-        $root->addChild($dir = $this->createDirectory('bar'));
-        $cleaner->register($dir->url());
-        $dir->addChild($dirFile = $this->createFile('baz'));
-        $cleaner->register($dirFile->url());
-        $root->addChild($emptyDir = $this->createDirectory('qux'));
-        $cleaner->register($root->url() . '/qux');
-        $root->addChild($file = $this->createFile('quxx'));
-        $cleaner->register($file->url());
-        $root->addChild($file = $this->createFile('other'));
+        $root->addChild($child1 = $this->createDirectory('bar'));
+        $child1->addChild($this->createFile('baz'));
+        $root->addChild($this->createDirectory('qux'));
+        $root->addChild($child3 = $this->createDirectory('quxx'));
 
-        $cleaner->clean();
+        $cleaner->clean([$child1->url(), $child3->url()]);
 
         $this->assertCount(1, $root->getChildren());
-        $this->assertTrue($root->hasChild('other'));
+        $this->assertTrue($root->hasChild('qux'));
     }
 }

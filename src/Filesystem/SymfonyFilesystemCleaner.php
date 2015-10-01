@@ -12,32 +12,15 @@ final class SymfonyFilesystemCleaner implements FilesystemCleaner
     private $filesystem;
 
     /**
-     * @var string[]
-     */
-    private $toClean = [];
-
-    /**
      * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        // @codeCoverageIgnoreStart
-        register_shutdown_function(function () {
-            $this->clean();
-        });
-        // @codeCoverageIgnoreEnd
     }
 
-    public function register($path)
+    public function clean(array $paths)
     {
-        $this->toClean[] = $path;
-    }
-
-    public function clean()
-    {
-        $this->filesystem->remove(array_unique($this->toClean));
-        $this->toClean = [];
+        $this->filesystem->remove(array_unique($paths));
     }
 }
