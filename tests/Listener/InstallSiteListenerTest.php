@@ -39,7 +39,7 @@ final class InstallSiteListenerTest extends ListenerTest
                 Argument::type('eLife\IsolatedDrupalBehatExtension\Event\InstallingSite')
             )
             ->shouldBeCalledTimes(1)
-            ->should(new CallbackPrediction(function (array $calls) {
+            ->should(new CallbackPrediction(function (array $calls) use ($drupal) {
                 /** @var Call $call */
                 $call = $calls[0];
 
@@ -58,6 +58,10 @@ final class InstallSiteListenerTest extends ListenerTest
                 Assert::assertSame(
                     '-d sendmail_path=' . `which true`,
                     $process->getEnv()['PHP_OPTIONS']
+                );
+                Assert::assertSame(
+                    $drupal->getPath(),
+                    $process->getWorkingDirectory()
                 );
             }));
 

@@ -62,7 +62,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
                 $process = $call->getArguments()[0];
 
                 Assert::assertSame(
-                    "'/path/to/drush' 'sql-dump' '--result-file=vfs://foo/sites/localhost.master/db.sql' '--yes'",
+                    "'/path/to/drush' 'sql-dump' '--result-file=vfs://foo/sites/localhost.master/db.sql' '--uri=http://localhost/' '--yes'",
                     $process->getCommandLine()
                 );
             }));
@@ -149,19 +149,19 @@ final class BypassInstallSiteListenerTest extends ListenerTest
                 $process1 = $calls[1]->getArguments()[0];
 
                 Assert::assertSame(
-                    "'/path/to/drush' 'sql-drop' '--yes'",
+                    "'/path/to/drush' 'sql-drop' '--uri=http://localhost/' '--yes'",
                     $process0->getCommandLine()
                 );
                 Assert::assertSame(
-                    $drupal->getSitePath(),
+                    $drupal->getPath(),
                     $process0->getWorkingDirectory()
                 );
                 Assert::assertSame(
-                    "'/path/to/drush' 'sql-query' '--file=vfs://foo/sites/localhost/db.sql' '--yes'",
+                    "'/path/to/drush' 'sql-query' '--file=vfs://foo/sites/localhost/db.sql' '--uri=http://localhost/' '--yes'",
                     $process1->getCommandLine()
                 );
                 Assert::assertSame(
-                    $drupal->getSitePath(),
+                    $drupal->getPath(),
                     $process1->getWorkingDirectory()
                 );
             }));
