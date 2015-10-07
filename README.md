@@ -34,7 +34,7 @@ Requirements
 Enabling the extension
 ----------------------
 
-1. Add the extension to your dependencies (`composer require elife/isolated-drupal-behat-extension:~1.0@dev`).
+1. Add the extension to your dependencies (`composer require elife/isolated-drupal-behat-extension`).
 
 2. Add the extension to your Behat configuration:
 
