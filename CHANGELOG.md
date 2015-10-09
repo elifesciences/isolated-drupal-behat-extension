@@ -1,3 +1,9 @@
+0.2.2 / 2015-10-09
+==================
+
+  * Remove master copy of site if it already exists and the `clean_up` setting is `true` ([#5](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/5)).
+  * Avoid Drush failures if symlinking part of the Drupal install ([#6](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/6)).
+
 0.2.1 / 2015-09-30
 ==================
 
