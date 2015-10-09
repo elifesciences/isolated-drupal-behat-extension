@@ -130,8 +130,9 @@ final class BypassInstallSiteListener implements EventSubscriber
             ProcessBuilder::create()
                 ->setPrefix($this->binary)
                 ->add('sql-drop')
+                ->add('--uri=' . $this->drupal->getUri())
                 ->add('--yes')
-                ->setWorkingDirectory($this->drupal->getSitePath())
+                ->setWorkingDirectory($this->drupal->getPath())
                 ->setTimeout(null)
                 ->getProcess()
         );
@@ -142,8 +143,9 @@ final class BypassInstallSiteListener implements EventSubscriber
                 ->setPrefix($this->binary)
                 ->add('sql-query')
                 ->add('--file=' . $this->drupal->getSitePath() . '/db.sql')
+                ->add('--uri=' . $this->drupal->getUri())
                 ->add('--yes')
-                ->setWorkingDirectory($this->drupal->getSitePath())
+                ->setWorkingDirectory($this->drupal->getPath())
                 ->setTimeout(null)
                 ->getProcess()
         );
@@ -178,8 +180,9 @@ final class BypassInstallSiteListener implements EventSubscriber
                 ->setPrefix($this->binary)
                 ->add('sql-dump')
                 ->add('--result-file=' . $this->masterPath . '/db.sql')
+                ->add('--uri=' . $this->drupal->getUri())
                 ->add('--yes')
-                ->setWorkingDirectory($this->drupal->getSitePath())
+                ->setWorkingDirectory($this->drupal->getPath())
                 ->setTimeout(null)
                 ->getProcess()
         );
