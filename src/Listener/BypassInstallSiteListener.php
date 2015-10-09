@@ -2,11 +2,13 @@
 
 namespace eLife\IsolatedDrupalBehatExtension\Listener;
 
+use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use eLife\IsolatedDrupalBehatExtension\Drupal;
 use eLife\IsolatedDrupalBehatExtension\Event\SiteCloned;
 use eLife\IsolatedDrupalBehatExtension\Event\InstallingSite;
 use eLife\IsolatedDrupalBehatExtension\Event\SiteInstalled;
 use eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner;
+use eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner;
 use eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface as EventSubscriber;
@@ -50,9 +52,15 @@ final class BypassInstallSiteListener implements EventSubscriber
      */
     private $filesystemCleaner;
 
+    /**
+     * @var LazyFilesystemCleaner
+     */
+    private $lazyFilesystemCleaner;
+
     public static function getSubscribedEvents()
     {
         return [
+            SuiteTested::BEFORE => ['onBeforeSuite', 256],
             InstallingSite::NAME => ['onInstallingSite', 255],
             SiteInstalled::NAME => ['onSiteInstalled', 255],
         ];
@@ -65,6 +73,7 @@ final class BypassInstallSiteListener implements EventSubscriber
      * @param string $drush
      * @param ProcessRunner $processRunner
      * @param FilesystemCleaner $filesystemCleaner
+     * @param LazyFilesystemCleaner $lazyFilesystemCleaner
      */
     public function __construct(
         EventDispatcher $eventDispatcher,
@@ -72,7 +81,8 @@ final class BypassInstallSiteListener implements EventSubscriber
         Filesystem $filesystem,
         $drush,
         ProcessRunner $processRunner,
-        FilesystemCleaner $filesystemCleaner
+        FilesystemCleaner $filesystemCleaner,
+        LazyFilesystemCleaner $lazyFilesystemCleaner
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->drupal = $drupal;
@@ -81,6 +91,12 @@ final class BypassInstallSiteListener implements EventSubscriber
         $this->binary = $drush;
         $this->processRunner = $processRunner;
         $this->filesystemCleaner = $filesystemCleaner;
+        $this->lazyFilesystemCleaner = $lazyFilesystemCleaner;
+    }
+
+    public function onBeforeSuite()
+    {
+        $this->filesystemCleaner->clean([$this->masterPath]);
     }
 
     public function onInstallingSite(InstallingSite $event)
@@ -144,7 +160,7 @@ final class BypassInstallSiteListener implements EventSubscriber
 
     public function onSiteInstalled()
     {
-        $this->filesystemCleaner->register($this->masterPath);
+        $this->lazyFilesystemCleaner->register($this->masterPath);
 
         $this->filesystem->mirror(
             $this->drupal->getSitePath(),

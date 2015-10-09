@@ -2,6 +2,11 @@
 
 namespace eLife\IsolatedDrupalBehatExtension\Listener;
 
+use Behat\Testwork\Environment\StaticEnvironment;
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
+use Behat\Testwork\EventDispatcher\Event\SuiteTested;
+use Behat\Testwork\Specification\NoSpecificationsIterator;
+use Behat\Testwork\Suite\GenericSuite;
 use eLife\IsolatedDrupalBehatExtension\Drupal;
 use eLife\IsolatedDrupalBehatExtension\Event\InstallingSite;
 use eLife\IsolatedDrupalBehatExtension\Event\SiteCloned;
@@ -20,6 +25,47 @@ final class BypassInstallSiteListenerTest extends ListenerTest
     /**
      * @test
      */
+    public function itRemovesExistingCopiesBeforeTheSuiteIsRun()
+    {
+        $dispatcher = $this->prophesize('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $root = vfsStream::setup('foo');
+        $root->addChild($sites = vfsStream::newDirectory('sites'));
+        $sites->addChild(vfsStream::newDirectory('localhost.master'));
+        $drupal = new Drupal('vfs://foo/', 'http://localhost/', 'standard');
+        $processRunner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner');
+        $cleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner');
+        $lazyCleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner');
+
+        $listener = new BypassInstallSiteListener(
+            $dispatcher->reveal(),
+            $drupal,
+            new Filesystem(),
+            '/path/to/drush',
+            $processRunner->reveal(),
+            $cleaner->reveal(),
+            $lazyCleaner->reveal()
+        );
+
+        $masterPath = $drupal->getSitePath() . '.master';
+
+        $realDispatcher = $this->getDispatcher($listener);
+
+        $suite = new GenericSuite('foo', []);
+
+        $realDispatcher->dispatch(
+            SuiteTested::BEFORE,
+            new BeforeSuiteTested(
+                new StaticEnvironment($suite),
+                new NoSpecificationsIterator($suite)
+            )
+        );
+
+        $cleaner->clean([$masterPath])->shouldHaveBeenCalled();
+    }
+
+    /**
+     * @test
+     */
     public function itTakesACopyOfAnInstalledSite()
     {
         $dispatcher = $this->prophesize('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -30,6 +76,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
         $drupal = new Drupal('vfs://foo/', 'http://localhost/', 'standard');
         $processRunner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner');
         $cleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner');
+        $lazyCleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner');
 
         $listener = new BypassInstallSiteListener(
             $dispatcher->reveal(),
@@ -37,7 +84,8 @@ final class BypassInstallSiteListenerTest extends ListenerTest
             new Filesystem(),
             '/path/to/drush',
             $processRunner->reveal(),
-            $cleaner->reveal()
+            $cleaner->reveal(),
+            $lazyCleaner->reveal()
         );
 
         $masterPath = $drupal->getSitePath() . '.master';
@@ -68,7 +116,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
             }));
 
 
-        $cleaner->register($masterPath)->shouldHaveBeenCalled();
+        $lazyCleaner->register($masterPath)->shouldHaveBeenCalled();
     }
 
     /**
@@ -82,6 +130,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
         $drupal = new Drupal('vfs://foo/', 'http://localhost/', 'standard');
         $processRunner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner');
         $cleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner');
+        $lazyCleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner');
 
         $listener = new BypassInstallSiteListener(
             $dispatcher->reveal(),
@@ -89,7 +138,8 @@ final class BypassInstallSiteListenerTest extends ListenerTest
             new Filesystem(),
             '/path/to/drush',
             $processRunner->reveal(),
-            $cleaner->reveal()
+            $cleaner->reveal(),
+            $lazyCleaner->reveal()
         );
 
         $realDispatcher = $this->getDispatcher($listener);
@@ -116,6 +166,7 @@ final class BypassInstallSiteListenerTest extends ListenerTest
         $drupal = new Drupal('vfs://foo/', 'http://localhost/', 'standard');
         $processRunner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner');
         $cleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner');
+        $lazyCleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner');
 
         $listener = new BypassInstallSiteListener(
             $dispatcher->reveal(),
@@ -123,7 +174,8 @@ final class BypassInstallSiteListenerTest extends ListenerTest
             new Filesystem(),
             '/path/to/drush',
             $processRunner->reveal(),
-            $cleaner->reveal()
+            $cleaner->reveal(),
+            $lazyCleaner->reveal()
         );
 
         $realDispatcher = $this->getDispatcher($listener);
@@ -140,7 +192,8 @@ final class BypassInstallSiteListenerTest extends ListenerTest
         $processRunner
             ->run(Argument::type('Symfony\Component\Process\Process'))
             ->shouldBeCalledTimes(2)
-            ->should(new CallbackPrediction(function (array $calls) use ($drupal) {
+            ->should(new CallbackPrediction(function (array $calls) use ($drupal
+            ) {
                 /** @var Call[] $calls */
 
                 /** @var Process $process0 */

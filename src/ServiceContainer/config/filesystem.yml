@@ -14,3 +14,14 @@ services:
   elife.isolated_drupal_behat.filesystem_cleaner.no_op:
     class: eLife\IsolatedDrupalBehatExtension\Filesystem\NoOpFilesystemCleaner
     public: false
+
+  elife.isolated_drupal_behat.lazy_filesystem_cleaner:
+    class: eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner
+    abstract: true
+
+  elife.isolated_drupal_behat.lazy_filesystem_cleaner.in_memory:
+    class: eLife\IsolatedDrupalBehatExtension\Filesystem\InMemoryLazyFilesystemCleaner
+    decorates: elife.isolated_drupal_behat.lazy_filesystem_cleaner
+    public: false
+    arguments:
+      - @elife.isolated_drupal_behat.filesystem_cleaner

@@ -5,7 +5,7 @@ namespace eLife\IsolatedDrupalBehatExtension\Filesystem;
 interface FilesystemCleaner
 {
     /**
-     * @param string $path
+     * @param string[] $paths
      */
-    public function register($path);
+    public function clean(array $paths);
 }
