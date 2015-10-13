@@ -1,3 +1,8 @@
+0.2.3 / 2015-10-13
+==================
+
+  * Make sure Drush executes on the test site ([#7](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/7)).
+
 0.2.2 / 2015-10-09
 ==================
 
