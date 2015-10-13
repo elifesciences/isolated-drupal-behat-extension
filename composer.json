@@ -10,6 +10,7 @@
         "php": ">=5.4",
         "behat/behat": "^3.0.6",
         "behat/mink-extension": "~2.0",
+        "drupal/drupal-driver": "^1.0.1",
         "drupal/drupal-extension": "~3.0",
         "symfony/dependency-injection": "~2.5",
         "symfony/event-dispatcher": "~2.3",

@@ -4,6 +4,7 @@ namespace eLife\IsolatedDrupalBehatExtension\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension as TestworkExtension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use eLife\IsolatedDrupalBehatExtension\ServiceContainer\Compiler\DrushUriCompilerPass;
 use eLife\IsolatedDrupalBehatExtension\ServiceContainer\Compiler\FilesystemCleanerCompilerPass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
@@ -79,6 +80,9 @@ final class IsolatedDrupalBehatExtension implements TestworkExtension
      */
     public function getCompilerPasses()
     {
-        return [new FilesystemCleanerCompilerPass()];
+        return [
+            new DrushUriCompilerPass(),
+            new FilesystemCleanerCompilerPass(),
+        ];
     }
 }

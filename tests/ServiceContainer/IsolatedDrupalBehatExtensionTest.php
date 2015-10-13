@@ -6,6 +6,7 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
 use eLife\IsolatedDrupalBehatExtension\TestCase;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 final class IsolatedDrupalBehatExtensionTest extends TestCase
 {
@@ -36,7 +37,13 @@ final class IsolatedDrupalBehatExtensionTest extends TestCase
     {
         $extension = new IsolatedDrupalBehatExtension();
 
-        $extension->process(new ContainerBuilder());
+        $container = new ContainerBuilder();
+        $container->setDefinition(
+            'drupal.driver.drush',
+            new Definition('Drupal\Driver\DrushDriver')
+        );
+
+        $extension->process($container);
     }
 
     /**
