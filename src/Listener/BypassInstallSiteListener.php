@@ -2,6 +2,7 @@
 
 namespace eLife\IsolatedDrupalBehatExtension\Listener;
 
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use eLife\IsolatedDrupalBehatExtension\Drupal;
 use eLife\IsolatedDrupalBehatExtension\Event\SiteCloned;
@@ -94,9 +95,14 @@ final class BypassInstallSiteListener implements EventSubscriber
         $this->lazyFilesystemCleaner = $lazyFilesystemCleaner;
     }
 
-    public function onBeforeSuite()
+    public function onBeforeSuite(BeforeSuiteTested $event)
     {
         $this->filesystemCleaner->clean([$this->masterPath]);
+
+        if (is_dir($this->drupal->getSitePath())) {
+            // The site exists, it doesn't need to be installed at this point.
+            $event->stopPropagation();
+        }
     }
 
     public function onInstallingSite(InstallingSite $event)
