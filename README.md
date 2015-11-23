@@ -6,7 +6,7 @@ Isolated-Drupal Behat Extension
 What does the extension do?
 ---------------------------
 
-The [Drupal extension for Behat](https://github.com/jhedstrom/drupalextension) allows you to use [Behat](https://github.com/behat/behat) to writes scenarios that describe and test the functionality of your Drupal site.
+The [Drupal extension for Behat](https://github.com/jhedstrom/drupalextension) allows you to use [Behat](https://github.com/behat/behat) to writes scenarios that describe and test the functionality of your Drupal 7 site.
 
 It's flexible, in that you are able to do things such as test remote sites. Because of this, however, it doesn't run each scenario in isolation, which means that they can be influenced by each other, as well as the existing site. When using Behat to purely test your codebase this is dangerous, as scenarios might pass or fail when in fact the opposite should happen.
 
