@@ -77,6 +77,7 @@ This is a path to a `settings.php` file to use. This is empty by default.
 
 Note that the following values will be overwritten to ensure isolation:
 
+* `$base_url`
 * `$databases`
 * `$drupal_hash_salt`
 * `$conf["file_public_path"]`
