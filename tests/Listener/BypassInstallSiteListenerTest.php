@@ -54,13 +54,54 @@ final class BypassInstallSiteListenerTest extends ListenerTest
 
         $realDispatcher->dispatch(
             SuiteTested::BEFORE,
-            new BeforeSuiteTested(
+            $event = new BeforeSuiteTested(
                 new StaticEnvironment($suite),
                 new NoSpecificationsIterator($suite)
             )
         );
 
         $cleaner->clean([$masterPath])->shouldHaveBeenCalled();
+
+        $this->assertFalse($event->isPropagationStopped());
+    }
+
+    /**
+     * @test
+     */
+    public function itStopsTheInstallIfTheSiteExistsBeforeTheSuiteIsRun()
+    {
+        $dispatcher = $this->prophesize('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $root = vfsStream::setup('foo');
+        $root->addChild($sites = vfsStream::newDirectory('sites'));
+        $sites->addChild(vfsStream::newDirectory('localhost'));
+        $drupal = new Drupal('vfs://foo/', 'http://localhost/', 'standard');
+        $processRunner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Process\ProcessRunner');
+        $cleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\FilesystemCleaner');
+        $lazyCleaner = $this->prophesize('eLife\IsolatedDrupalBehatExtension\Filesystem\LazyFilesystemCleaner');
+
+        $listener = new BypassInstallSiteListener(
+            $dispatcher->reveal(),
+            $drupal,
+            new Filesystem(),
+            '/path/to/drush',
+            $processRunner->reveal(),
+            $cleaner->reveal(),
+            $lazyCleaner->reveal()
+        );
+
+        $realDispatcher = $this->getDispatcher($listener);
+
+        $suite = new GenericSuite('foo', []);
+
+        $realDispatcher->dispatch(
+            SuiteTested::BEFORE,
+            $event = new BeforeSuiteTested(
+                new StaticEnvironment($suite),
+                new NoSpecificationsIterator($suite)
+            )
+        );
+
+        $this->assertTrue($event->isPropagationStopped());
     }
 
     /**
@@ -146,8 +187,10 @@ final class BypassInstallSiteListenerTest extends ListenerTest
 
         $realDispatcher->dispatch(
             InstallingSite::NAME,
-            new InstallingSite($drupal, new ProcessBuilder())
+            $event = new InstallingSite($drupal, new ProcessBuilder())
         );
+
+        $this->assertFalse($event->isPropagationStopped());
     }
 
     /**
