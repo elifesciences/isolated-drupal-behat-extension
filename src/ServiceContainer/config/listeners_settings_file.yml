@@ -1,5 +1,10 @@
 services:
 
+  elife.isolated_drupal_behat.listener.settings.base_url:
+    class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\BaseUrlSettingsFileListener
+    tags:
+      - { name: event_dispatcher.subscriber }
+
   elife.isolated_drupal_behat.listener.settings.database:
     class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\DatabaseSettingsFileListener
     arguments:
