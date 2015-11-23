@@ -1,3 +1,10 @@
+0.2.4 / 2015-11-23
+==================
+
+  * Prevent a superfluous copy before the suite is run ([#10](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/10)).
+  * Confirm Symfony 3 and Drush 8 compatibility ([#11](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/11)).
+  * Override `$base_url` ([#13](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/13)).
+
 0.2.3 / 2015-10-13
 ==================
 
