@@ -3,37 +3,37 @@ services:
   elife.isolated_drupal_behat.listener.install_site:
     class: eLife\IsolatedDrupalBehatExtension\Listener\InstallSiteListener
     arguments:
-      - @event_dispatcher
-      - @elife.isolated_drupal_behat.drupal
+      - '@event_dispatcher'
+      - '@elife.isolated_drupal_behat.drupal'
       - %drupal.driver.drush.binary%
-      - @elife.isolated_drupal_behat.process_runner
+      - '@elife.isolated_drupal_behat.process_runner'
     tags:
       - { name: event_dispatcher.subscriber }
 
   elife.isolated_drupal_behat.listener.bypass_install_site:
     class: eLife\IsolatedDrupalBehatExtension\Listener\BypassInstallSiteListener
     arguments:
-      - @event_dispatcher
-      - @elife.isolated_drupal_behat.drupal
-      - @elife.isolated_drupal_behat.symfony_filesystem
+      - '@event_dispatcher'
+      - '@elife.isolated_drupal_behat.drupal'
+      - '@elife.isolated_drupal_behat.symfony_filesystem'
       - %drupal.driver.drush.binary%
-      - @elife.isolated_drupal_behat.process_runner
-      - @elife.isolated_drupal_behat.filesystem_cleaner
-      - @elife.isolated_drupal_behat.lazy_filesystem_cleaner
+      - '@elife.isolated_drupal_behat.process_runner'
+      - '@elife.isolated_drupal_behat.filesystem_cleaner'
+      - '@elife.isolated_drupal_behat.lazy_filesystem_cleaner'
     tags:
       - { name: event_dispatcher.subscriber }
 
   elife.isolated_drupal_behat.listener.cleaner:
     class: eLife\IsolatedDrupalBehatExtension\Listener\CleanerListener
     arguments:
-      - @elife.isolated_drupal_behat.lazy_filesystem_cleaner
+      - '@elife.isolated_drupal_behat.lazy_filesystem_cleaner'
     tags:
       - { name: event_dispatcher.subscriber }
 
   elife.isolated_drupal_behat.listener.settings:
     class: eLife\IsolatedDrupalBehatExtension\Listener\WriteSettingsFileListener
     arguments:
-      - @event_dispatcher
-      - @elife.isolated_drupal_behat.symfony_filesystem
+      - '@event_dispatcher'
+      - '@elife.isolated_drupal_behat.symfony_filesystem'
     tags:
       - { name: event_dispatcher.subscriber }

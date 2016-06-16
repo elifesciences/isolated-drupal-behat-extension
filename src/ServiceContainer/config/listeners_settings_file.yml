@@ -22,13 +22,13 @@ services:
   elife.isolated_drupal_behat.listener.settings.hash_salt:
     class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\HashSaltSettingsFileListener
     arguments:
-      - @elife.isolated_drupal_behat.random_string_generator
+      - '@elife.isolated_drupal_behat.random_string_generator'
     tags:
       - { name: event_dispatcher.subscriber }
 
   elife.isolated_drupal_behat.listener.settings.file_path:
     class: eLife\IsolatedDrupalBehatExtension\Listener\SettingsFile\FilePathSettingsFileListener
     arguments:
-      - @elife.isolated_drupal_behat.random_string_generator
+      - '@elife.isolated_drupal_behat.random_string_generator'
     tags:
       - { name: event_dispatcher.subscriber }
