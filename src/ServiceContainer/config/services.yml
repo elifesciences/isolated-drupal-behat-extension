@@ -4,9 +4,9 @@ services:
     class: eLife\IsolatedDrupalBehatExtension\Drupal
     public: false
     arguments:
-      - %drupal.driver.drupal.drupal_root%
-      - %mink.base_url%
-      - %elife_drupal_behat.profile%
+      - '%drupal.driver.drupal.drupal_root%'
+      - '%mink.base_url%'
+      - '%elife_drupal_behat.profile%'
 
   elife.isolated_drupal_behat.symfony_filesystem:
     class: Symfony\Component\Filesystem\Filesystem
