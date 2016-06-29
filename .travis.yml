@@ -21,8 +21,8 @@ sudo: false
 
 cache:
     directories:
-      - $HOME/.composer/cache
-      - $HOME/.drush/cache
+      - $HOME/.composer/cache/files
+      - $HOME/.drush/cache/download
 
 install:
   - if [ "$DEPENDENCIES" != "low" ]; then composer install --no-interaction; fi;
