@@ -1,3 +1,8 @@
+0.2.5 / 2016-06-29
+==================
+
+  * Quote YAML strings correctly ([#14](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/14) and [#15](https://github.com/elifesciences/isolated-drupal-behat-extension/pull/15)).
+
 0.2.4 / 2015-11-23
 ==================
 
