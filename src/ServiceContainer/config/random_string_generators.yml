@@ -9,13 +9,13 @@ services:
     decorates: elife.isolated_drupal_behat.random_string_generator
     public: false
     arguments:
-      - @elife.isolated_drupal_behat.random_string_generator.limiting
+      - '@elife.isolated_drupal_behat.random_string_generator.limiting'
 
   elife.isolated_drupal_behat.random_string_generator.limiting:
     class: eLife\IsolatedDrupalBehatExtension\RandomString\LimitingRandomStringGenerator
     public: false
     arguments:
-      - @elife.isolated_drupal_behat.random_string_generator.hash
+      - '@elife.isolated_drupal_behat.random_string_generator.hash'
       - 10
 
   elife.isolated_drupal_behat.random_string_generator.hash:
