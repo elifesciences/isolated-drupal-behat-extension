@@ -5,7 +5,7 @@ services:
     arguments:
       - '@event_dispatcher'
       - '@elife.isolated_drupal_behat.drupal'
-      - %drupal.driver.drush.binary%
+      - '%drupal.driver.drush.binary%'
       - '@elife.isolated_drupal_behat.process_runner'
     tags:
       - { name: event_dispatcher.subscriber }
@@ -16,7 +16,7 @@ services:
       - '@event_dispatcher'
       - '@elife.isolated_drupal_behat.drupal'
       - '@elife.isolated_drupal_behat.symfony_filesystem'
-      - %drupal.driver.drush.binary%
+      - '%drupal.driver.drush.binary%'
       - '@elife.isolated_drupal_behat.process_runner'
       - '@elife.isolated_drupal_behat.filesystem_cleaner'
       - '@elife.isolated_drupal_behat.lazy_filesystem_cleaner'
